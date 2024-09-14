@@ -1,0 +1,69 @@
+-- DDL STATEMENTS --
+
+-- Create Subject table
+CREATE TABLE Subject (
+  SubjectID VARCHAR(10) NOT NULL,
+  Age DECIMAL(4,2),
+  Sex CHAR(1),
+  BMI DECIMAL(4,2),
+  IR_IS_Classification VARCHAR(10) DEFAULT NULL,
+  PRIMARY KEY (SubjectID)
+);
+
+
+-- Create Transcriptome Abundance table
+CREATE TABLE TranscriptomeAbundance (
+  SampleID VARCHAR(30) NOT NULL,
+  SubjectID VARCHAR(10) NOT NULL,
+  VisitID VARCHAR(15) NOT NULL,
+  A1BGabundance DECIMAL(10,9),
+  PRIMARY KEY (SubjectID, VisitID),
+  FOREIGN KEY (SubjectID) REFERENCES Subject(SubjectID)
+);
+
+
+-- Create Proteome Abundance table
+CREATE TABLE ProteomeAbundance (
+  SampleID VARCHAR(30) NOT NULL,
+  SubjectID VARCHAR(10) NOT NULL,
+  VisitID VARCHAR(15) NOT NULL,
+  PRIMARY KEY (SubjectID, VisitID),
+  FOREIGN KEY (SubjectID) REFERENCES Subject(SubjectID)
+);
+
+
+-- Create Metabolome Abundance table
+CREATE TABLE MetabolomeAbundance (
+  SampleID VARCHAR(30) NOT NULL,
+  SubjectID VARCHAR(10) NOT NULL,
+  VisitID VARCHAR(15) NOT NULL,
+  PRIMARY KEY (SubjectID, VisitID),
+  FOREIGN KEY (SubjectID) REFERENCES Subject(SubjectID)
+);
+
+
+-- Create Peaks table
+CREATE TABLE Peaks (
+  PeakID VARCHAR (50) NOT NULL,
+  PRIMARY KEY (PeakID)
+);
+
+
+-- Create Metabolites table
+CREATE TABLE Metabolites (
+  PeakID VARCHAR(50) NOT NULL,
+  MetaboliteName VARCHAR(100) NOT NULL,
+  KEGG_ID VARCHAR(10),
+  Pathway VARCHAR(255),
+  FOREIGN KEY (PeakID) REFERENCES Peaks(PeakID)
+);
+
+
+-- Create Annotation table
+CREATE TABLE Annotation (
+  PeakID VARCHAR(50) NOT NULL,
+  MetaboliteName VARCHAR(100) NOT NULL,
+  PRIMARY KEY (PeakID, MetaboliteName),
+  FOREIGN KEY (PeakID) REFERENCES Peaks(PeakID),
+  FOREIGN KEY (MetaboliteName) REFERENCES Metabolites(MetaboliteName)
+);
